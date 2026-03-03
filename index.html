@@ -1,236 +1,205 @@
-<img src="https://via.placeholder.com/400x500?text=Insert+Portrait+Here" alt="Shefa" class="reveal-portrait-img">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Sanctuary</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lato', sans-serif;
+            /* REPLACE THE URL BELOW WITH A LINK TO A GHIBLI GIF */
+            background: url('https://i.pinimg.com/originals/34/ec/3b/34ec3bce22f3e8b0d200ce2698947b19.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+        }
+
+        .glass-panel {
+            background: rgba(20, 30, 20, 0.75);
+            backdrop-filter: blur(10px);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 500px;
+            width: 90%;
+            transition: opacity 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            border: none;
+            border-bottom: 2px solid #fff;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            font-family: 'Lato', sans-serif;
+            margin-bottom: 20px;
+            transition: border-bottom 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-bottom: 2px solid #8fbc8f;
+        }
+
+        button {
+            background: #8fbc8f;
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Lato', sans-serif;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #a9dfa9;
+            transform: translateY(-2px);
+        }
+
+        .error {
+            color: #ff9999;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .portrait {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="intro" class="glass-panel">
+        <h1>A Quiet Place</h1>
+        <p>I built this space for you. Before you can enter, I need to know you remember the path.</p>
+        <button onclick="startJourney()">Enter</button>
     </div>
-    <div class="reveal-message">
-      You asked for a place where you can just rest and be guided. You don't ever have to look for it again. No matter how chaotic the world gets, this safe space is yours. Happy Birthday.
+
+    <div id="riddle-container" class="glass-panel hidden">
+        <h1 id="riddle-title">Memory I</h1>
+        <p id="riddle-text">Before I was the one protecting you, I was the one teaching you. What exact time did I usually come over for our classes?</p>
+        <input type="text" id="answer-input" placeholder="Your answer..." autocomplete="off">
+        <br>
+        <button onclick="checkAnswer()">Submit</button>
+        <div id="error-msg" class="error">That isn't quite right. Try again.</div>
     </div>
-    <div class="reveal-sig">Yours, Sahil</div>
-</div>
 
-<audio id="bg-music" loop>
-  <source src="https://assets.mixkit.co/music/preview/mixkit-piano-reflections-fall-2893.mp3" type="audio/mpeg">
-</audio>
-<div class="music-hint" onclick="toggleMusic()" id="music-btn">♫ Play Music</div>
+    <div id="final-screen" class="glass-panel hidden">
+        <h1>Your Sanctuary</h1>
+        <p>You asked for a place where you can just rest and be guided. You don't ever have to look for it again. No matter how chaotic the world gets, this safe space is yours. Happy Birthday.</p>
+        
+        <img src="https://via.placeholder.com/350x450?text=Insert+Ghibli+Portrait+Here" alt="Our Portrait" class="portrait">
+    </div>
 
-<script>
-/* =========================================
-   1. RIDDLE DATA & LOGIC
-========================================= */
-const riddles = [
-  {
-    icon: "🌿", name: "Firefly I", title: "The Origin",
-    prompt: "Before I was the one protecting you, I was the one teaching you. What exact time did I usually come over for our classes?",
-    answers: ["2:30", "3:30", "2.30", "3.30", "2", "3"],
-    flower: "🌼", flowerName: "A Daisy Blooms",
-    quote: "It started with lessons, but I was already studying you."
-  },
-  {
-    icon: "🎐", name: "Firefly II", title: "The Intellect",
-    prompt: "We don't just connect on the surface; we connect in the depths. When the world is chaotic, what kind of literature or deep philosophical talks do we escape into?",
-    answers: ["literature", "russian", "philosophy", "books", "deep talks", "psychology"],
-    flower: "🪻", flowerName: "A Bluebell Blooms",
-    quote: "A beautiful mind is rare. Finding one that matches mine is a privilege."
-  },
-  {
-    icon: "🌻", name: "Firefly III", title: "The Protector",
-    prompt: "When you are exhausted, your energy is low, and you just want to blush like a red tomato, what do I send to take the pain away?",
-    answers: ["ice cream", "icecream"],
-    flower: "🌻", flowerName: "A Sunflower Blooms",
-    quote: "You never have to make decisions when you are tired. I will always take care of it."
-  },
-  {
-    icon: "💮", name: "Firefly IV", title: "The Sanctuary",
-    prompt: "Whenever the external world gets too heavy or the nightmares come, what two words do we use to describe what I am to you?",
-    answers: ["safe space", "safespace"],
-    flower: "💮", flowerName: "A White Rose Blooms",
-    quote: "Correct. And that will never change."
-  }
-];
+    <script>
+        const riddles = [
+            {
+                title: "The Origin",
+                text: "Before I was the one protecting you, I was the one teaching you. What time did I usually come over for our classes?",
+                // Accepts variations of 2:30 or 3:30 from your chat history
+                answers: ["2:30", "3:30", "2.30", "3.30", "2", "3"] 
+            },
+            {
+                title: "The Protector",
+                text: "When you are exhausted, your energy is low, and you just want to blush like a red tomato, what do I send to take the pain away?",
+                answers: ["ice cream", "icecream"]
+            },
+            {
+                title: "The Anchor",
+                text: "Whenever the external world gets too heavy, what two words do we use to describe what I am to you?",
+                answers: ["safe space", "safespace"]
+            }
+        ];
 
-let currentIndex = -1;
-let unlockedCount = 0;
+        let currentRiddle = 0;
 
-function openPrompt(index) {
-  const btn = document.getElementById(`ff-${index}`);
-  if(btn.classList.contains('inactive') || btn.classList.contains('done')) return;
-  
-  currentIndex = index;
-  const r = riddles[index];
-  
-  document.getElementById('m-icon').innerText = r.icon;
-  document.getElementById('m-number').innerText = r.name;
-  document.getElementById('m-title').innerText = r.title;
-  document.getElementById('m-prompt').innerText = r.prompt;
-  document.getElementById('m-input').value = "";
-  document.getElementById('m-error').innerText = "";
-  
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('m-input').focus(), 100);
-}
+        function startJourney() {
+            document.getElementById('intro').classList.add('hidden');
+            document.getElementById('riddle-container').classList.remove('hidden');
+            loadRiddle();
+        }
 
-function submitAnswer() {
-  const input = document.getElementById('m-input').value.toLowerCase().trim();
-  const errorDiv = document.getElementById('m-error');
-  const r = riddles[currentIndex];
-  
-  let isCorrect = r.answers.some(ans => input.includes(ans));
-  
-  if(isCorrect) {
-    // Hide modal
-    document.getElementById('modal-overlay').classList.remove('open');
-    
-    // Update button state
-    const btn = document.getElementById(`ff-${currentIndex}`);
-    btn.classList.remove('active');
-    btn.classList.add('done');
-    btn.innerHTML = `${r.flower}<span class="ff-label">Unlocked</span>`;
-    
-    // Populate and show reward screen
-    setTimeout(() => {
-      document.getElementById('r-flower').innerText = r.flower;
-      document.getElementById('r-name').innerText = r.flowerName;
-      document.getElementById('r-quote').innerText = r.quote;
-      document.getElementById('reward-screen').classList.add('open');
-      
-      // Update top bar
-      const slot = document.getElementById(`slot-${currentIndex}`);
-      slot.innerHTML = `<span class="slot-flower">${r.flower}</span>`;
-      slot.classList.add('bloomed');
-      
-      unlockedCount++;
-    }, 400);
-    
-  } else {
-    errorDiv.innerText = "That isn't quite right. Try again.";
-    errorDiv.style.animation = 'none';
-    errorDiv.offsetHeight; // trigger reflow
-    errorDiv.style.animation = 'shake 0.4s ease';
-  }
-}
+        function loadRiddle() {
+            document.getElementById('riddle-title').innerText = riddles[currentRiddle].title;
+            document.getElementById('riddle-text').innerText = riddles[currentRiddle].text;
+            document.getElementById('answer-input').value = "";
+            document.getElementById('error-msg').style.display = "none";
+        }
 
-// Allow Enter key to submit
-document.getElementById('m-input').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    submitAnswer();
-  }
-});
+        function checkAnswer() {
+            const userInput = document.getElementById('answer-input').value.toLowerCase().trim();
+            const correctAnswers = riddles[currentRiddle].answers;
 
-function closeReward() {
-  document.getElementById('reward-screen').classList.remove('open');
-  
-  if(unlockedCount < riddles.length) {
-    // Activate next firefly
-    const nextBtn = document.getElementById(`ff-${unlockedCount}`);
-    if(nextBtn) {
-      nextBtn.classList.remove('inactive');
-      nextBtn.classList.add('active');
-    }
-  } else {
-    // All unlocked, trigger grand reveal
-    setTimeout(triggerGrandReveal, 1000);
-  }
-}
+            let isCorrect = false;
+            for (let i = 0; i < correctAnswers.length; i++) {
+                if (userInput.includes(correctAnswers[i])) {
+                    isCorrect = true;
+                    break;
+                }
+            }
 
-function triggerGrandReveal() {
-  // Fade out UI, fade in reveal
-  document.getElementById('ui').style.opacity = '0';
-  document.getElementById('ui').style.pointerEvents = 'none';
-  
-  const reveal = document.getElementById('grand-reveal');
-  reveal.classList.add('open');
-  
-  // Generate stars
-  const starContainer = document.getElementById('reveal-stars');
-  for(let i=0; i<100; i++) {
-    let star = document.createElement('div');
-    star.className = 'r-star';
-    let size = Math.random() * 3 + 1;
-    star.style.width = size + 'px';
-    star.style.height = size + 'px';
-    star.style.left = Math.random() * 100 + 'vw';
-    star.style.top = Math.random() * 100 + 'vh';
-    star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
-    star.style.setProperty('--o', Math.random() * 0.5 + 0.1);
-    starContainer.appendChild(star);
-  }
-  
-  // Generate falling lily petals
-  for(let i=0; i<30; i++) {
-    setTimeout(() => {
-      let petal = document.createElement('div');
-      petal.className = 'r-petal';
-      petal.innerText = '💮';
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.top = '-5vh';
-      petal.style.setProperty('--rd', (Math.random() * 200 - 100) + 'px');
-      petal.style.setProperty('--rr', (Math.random() * 360) + 'deg');
-      petal.style.animationDuration = (Math.random() * 5 + 5) + 's';
-      reveal.appendChild(petal);
-    }, Math.random() * 5000);
-  }
-}
+            if (isCorrect) {
+                currentRiddle++;
+                if (currentRiddle < riddles.length) {
+                    loadRiddle();
+                } else {
+                    showFinal();
+                }
+            } else {
+                document.getElementById('error-msg').style.display = "block";
+            }
+        }
 
-/* =========================================
-   2. AMBIENT ANIMATIONS & AUDIO
-========================================= */
-let isPlaying = false;
-function toggleMusic() {
-  const audio = document.getElementById('bg-music');
-  const btn = document.getElementById('music-btn');
-  if(isPlaying) {
-    audio.pause();
-    btn.innerText = "♫ Play Music";
-  } else {
-    audio.play();
-    btn.innerText = "♫ Pause Music";
-  }
-  isPlaying = !isPlaying;
-}
+        function showFinal() {
+            document.getElementById('riddle-container').classList.add('hidden');
+            document.getElementById('final-screen').classList.remove('hidden');
+        }
 
-// Generate Grass
-const grassRow = document.getElementById('grass-row');
-const grassCount = Math.floor(window.innerWidth / 4);
-for(let i=0; i<grassCount; i++) {
-  let blade = document.createElement('div');
-  blade.className = 'blade';
-  blade.style.left = (i * 4 + Math.random() * 4) + 'px';
-  blade.style.height = (Math.random() * 40 + 20) + 'px';
-  blade.style.animationDuration = (Math.random() * 2 + 3) + 's';
-  blade.style.animationDelay = (Math.random() * -5) + 's';
-  grassRow.appendChild(blade);
-}
-
-// Ambient Fireflies
-for(let i=0; i<15; i++) {
-  let ff = document.createElement('div');
-  ff.className = 'firefly-ambient';
-  document.getElementById('scene').appendChild(ff);
-  
-  function animateFF() {
-    ff.style.left = Math.random() * 100 + 'vw';
-    ff.style.top = Math.random() * 100 + 'vh';
-    ff.style.setProperty('--fx', (Math.random() * 100 - 50) + 'px');
-    ff.style.setProperty('--fy', (Math.random() * -100 - 20) + 'px');
-    ff.style.animationDuration = (Math.random() * 4 + 4) + 's';
-    setTimeout(animateFF, 8000);
-  }
-  animateFF();
-}
-
-// Falling Dandelions/Petals
-for(let i=0; i<20; i++) {
-  setTimeout(() => {
-    let petal = document.createElement('div');
-    petal.className = 'petal';
-    petal.innerText = '🌱'; // Dandelion seed look
-    petal.style.left = Math.random() * 100 + 'vw';
-    petal.style.top = '-10vh';
-    petal.style.setProperty('--drift', (Math.random() * 300 - 150) + 'px');
-    petal.style.setProperty('--spin', (Math.random() * 360) + 'deg');
-    petal.style.animationDuration = (Math.random() * 10 + 10) + 's';
-    document.getElementById('scene').appendChild(petal);
-  }, Math.random() * 10000);
-}
-</script>
+        // Allow pressing Enter to submit
+        document.getElementById('answer-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    </script>
 </body>
 </html>
